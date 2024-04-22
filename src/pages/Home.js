@@ -48,36 +48,36 @@ function Home() {
       <nav className="navbar">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <a href="" className="nav-link">
+            <span className="nav-link">
               Home
-            </a>
+            </span>
           </li>
           <li className="nav-item">
-            <a href="" className="nav-link">
+            <span className="nav-link">
               About
-            </a>
+            </span>
           </li>
           <li className="nav-item">
-            <a href="" className="nav-link">
+            <span className="nav-link">
               Services
-            </a>
+            </span>
           </li>
           <li className="nav-item">
-            <a href="" className="nav-link">
+            <span className="nav-link">
               Contact
-            </a>
+            </span>
           </li>
         </ul>
         <ul className="navbar-nav right">
           <li className="nav-item">
-            <a href="" className="nav-link" onClick={openModal}>
+            <span className="nav-link" onClick={openModal}>
               Login
-            </a>
+            </span>
           </li>
           <li className="nav-item">
-            <a href="" className="nav-link">
+            <span className="nav-link">
               Register
-            </a>
+            </span>
           </li>
         </ul>
       </nav>

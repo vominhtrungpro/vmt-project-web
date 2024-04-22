@@ -50,9 +50,9 @@ function LoginForm({ onLoginSuccess }) {
             />
             Remember me
           </label>
-          <a>
+          <span>
             Forgot password
-          </a>
+          </span>
         </div>
         <button type="submit" className="login-button">Login</button>
       </form>
