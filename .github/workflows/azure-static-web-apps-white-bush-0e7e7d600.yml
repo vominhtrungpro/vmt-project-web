@@ -25,6 +25,8 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm install
+      - name: DMM babel
+        run: npm install --save-dev @babel/plugin-proposal-private-property-in-object
       - name: Build React app
         run: npm run build
       - name: Build And Deploy
