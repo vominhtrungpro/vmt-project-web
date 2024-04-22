@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import React, { useState } from "react";
 import LoginForm from "./components/LoginForm";
 
-const CustomModal = ({ isOpen, closeModal, onLoginSuccess }) => {
+const CustomModal = ({ isOpen, closeModal,onLoginSuccess  }) => {
   const customStyles = {
     content: {
       width: "50%",
@@ -42,49 +42,46 @@ function Home() {
     closeModal(); // Close the modal
   };
 
+
   return (
     <div>
       <nav className="navbar">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <a href="#" className="nav-link">
+            <a href="" className="nav-link">
               Home
             </a>
           </li>
           <li className="nav-item">
-            <a href="#" className="nav-link">
+            <a href="" className="nav-link">
               About
             </a>
           </li>
           <li className="nav-item">
-            <a href="#" className="nav-link">
+            <a href="" className="nav-link">
               Services
             </a>
           </li>
           <li className="nav-item">
-            <a href="#" className="nav-link">
+            <a href="" className="nav-link">
               Contact
             </a>
           </li>
         </ul>
         <ul className="navbar-nav right">
           <li className="nav-item">
-            <a href="#" className="nav-link" onClick={openModal}>
+            <a href="" className="nav-link" onClick={openModal}>
               Login
             </a>
           </li>
           <li className="nav-item">
-            <a href="#" className="nav-link">
+            <a href="" className="nav-link">
               Register
             </a>
           </li>
         </ul>
       </nav>
-      <CustomModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        onLoginSuccess={handleLoginSuccess}
-      />
+      <CustomModal isOpen={isOpen} closeModal={closeModal} onLoginSuccess={handleLoginSuccess} />
     </div>
   );
 }

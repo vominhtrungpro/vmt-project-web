@@ -50,7 +50,7 @@ function LoginForm({ onLoginSuccess }) {
             />
             Remember me
           </label>
-          <a href="#">
+          <a>
             Forgot password
           </a>
         </div>
