@@ -52,21 +52,6 @@ function Home() {
               Home
             </span>
           </li>
-          <li className="nav-item">
-            <span className="nav-link">
-              About
-            </span>
-          </li>
-          <li className="nav-item">
-            <span className="nav-link">
-              Services
-            </span>
-          </li>
-          <li className="nav-item">
-            <span className="nav-link">
-              Contact
-            </span>
-          </li>
         </ul>
         <ul className="navbar-nav right">
           <li className="nav-item">
