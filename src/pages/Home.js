@@ -3,7 +3,10 @@ import Modal from "react-modal";
 import React, { useState } from "react";
 import LoginForm from "./components/LoginForm";
 
-const CustomModal = ({ isOpen, closeModal,onLoginSuccess  }) => {
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const CustomModal = ({ isOpen, closeModal, onLoginSuccess, onLoginFail }) => {
   const customStyles = {
     content: {
       width: "50%",
@@ -20,12 +23,14 @@ const CustomModal = ({ isOpen, closeModal,onLoginSuccess  }) => {
       contentLabel="Example Modal"
       style={customStyles}
     >
-      <LoginForm onLoginSuccess={onLoginSuccess} />
+      <LoginForm onLoginSuccess={onLoginSuccess} onLoginFail={onLoginFail} />
     </Modal>
   );
 };
 
 function Home() {
+  const notify = (message) => toast(message);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
@@ -37,20 +42,20 @@ function Home() {
   };
 
   const handleLoginSuccess = () => {
-    // Perform any actions upon successful login
-    console.log("Login successful!");
-    closeModal(); // Close the modal
+    notify("Login success!");
+    closeModal();
   };
 
+  const handleLoginFail = (message) => {
+    notify(message);
+  };
 
   return (
     <div>
       <nav className="navbar">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <span className="nav-link">
-              Home
-            </span>
+            <span className="nav-link">Home</span>
           </li>
         </ul>
         <ul className="navbar-nav right">
@@ -60,13 +65,17 @@ function Home() {
             </span>
           </li>
           <li className="nav-item">
-            <span className="nav-link">
-              Register
-            </span>
+            <span className="nav-link">Register</span>
           </li>
         </ul>
       </nav>
-      <CustomModal isOpen={isOpen} closeModal={closeModal} onLoginSuccess={handleLoginSuccess} />
+      <CustomModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        onLoginSuccess={handleLoginSuccess}
+        onLoginFail={handleLoginFail}
+      />
+      <ToastContainer />
     </div>
   );
 }

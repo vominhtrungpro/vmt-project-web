@@ -1,22 +1,32 @@
 import "./LoginForm.css";
 import React, { useState } from "react";
+import axios from "axios";
 
-function LoginForm({ onLoginSuccess }) {
+const API_URL =
+  "https://vmt-api-practice.azurewebsites.net/api/Authentication/login";
+
+function LoginForm({ onLoginSuccess, onLoginFail }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your login logic here
-    console.log("Username:", username);
-    console.log("Password:", password);
-    // After login logic, you can close the modal
-    const loginSuccess = true; // For demonstration purpose only
 
-    if (loginSuccess) {
-      // If login is successful, invoke the callback function
-      onLoginSuccess();
+    try {
+      const response = await axios.post(API_URL, {
+        email: username,
+        password: password,
+      });
+
+      if (response.data.isSuccess) {
+        localStorage.setItem('token', response.data.data.accessToken);
+        onLoginSuccess();
+      } else {
+        onLoginFail(response.data.messages[0].content);
+      }
+    } catch (error) {
+      console.log("Error:", error.response);
     }
   };
   return (
@@ -50,11 +60,11 @@ function LoginForm({ onLoginSuccess }) {
             />
             Remember me
           </label>
-          <span>
-            Forgot password
-          </span>
+          <span>Forgot password</span>
         </div>
-        <button type="submit" className="login-button">Login</button>
+        <button type="submit" className="login-button">
+          Login
+        </button>
       </form>
     </div>
   );

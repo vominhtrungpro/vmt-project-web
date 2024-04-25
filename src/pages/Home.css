@@ -24,6 +24,10 @@
 }
 
 .nav-link:hover {
+  cursor: pointer;
+}
+
+.nav-link:hover {
   background-color: #555;
 }
 
