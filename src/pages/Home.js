@@ -1,10 +1,10 @@
 import "./Home.css";
 import Modal from "react-modal";
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import LoginForm from "./components/LoginForm";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import NavBar from "./components/NavBar";
 
 const CustomModal = ({ isOpen, closeModal, onLoginSuccess, onLoginFail }) => {
   const customStyles = {
@@ -29,6 +29,16 @@ const CustomModal = ({ isOpen, closeModal, onLoginSuccess, onLoginFail }) => {
 };
 
 function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Kiểm tra nếu có token trong local storage khi component được tạo
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true); // Đã đăng nhập
+    }
+  }, []);
+
   const notify = (message) => toast(message);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -44,6 +54,12 @@ function Home() {
   const handleLoginSuccess = () => {
     notify("Login success!");
     closeModal();
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
   };
 
   const handleLoginFail = (message) => {
@@ -52,23 +68,7 @@ function Home() {
 
   return (
     <div>
-      <nav className="navbar">
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <span className="nav-link">Home</span>
-          </li>
-        </ul>
-        <ul className="navbar-nav right">
-          <li className="nav-item">
-            <span className="nav-link" onClick={openModal}>
-              Login
-            </span>
-          </li>
-          <li className="nav-item">
-            <span className="nav-link">Register</span>
-          </li>
-        </ul>
-      </nav>
+      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} openModal ={openModal}/>
       <CustomModal
         isOpen={isOpen}
         closeModal={closeModal}

@@ -34,3 +34,20 @@
 .right {
   margin-left: auto;
 }
+.menu{
+  display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-y: inherit;
+}
+.menu-list{
+  position: absolute;
+  bottom: -42px;
+  color: white;
+  background-color: #333;
+  border-radius: 10px;
+}
+.menu-list p{
+  margin: 0;
+  padding: 0;
+}
