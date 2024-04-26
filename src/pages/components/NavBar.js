@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode'
 
 function NavBar({ isLoggedIn,handleLogout, openModal }) {
     const [showTool,setShowTool] = useState(false)
+    
     const getAvatarUrl = () => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -26,9 +27,12 @@ function NavBar({ isLoggedIn,handleLogout, openModal }) {
           {isLoggedIn ? (
             <li className="nav-item menu">
                 <img src={getAvatarUrl()} alt="Avatar" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} onClick={()=>setShowTool(!showTool)}/>
-              {showTool && <div className="nav-link menu-list" >
-                <p onClick={handleLogout}>Logout</p>
-              </div>}
+              {showTool && (
+          <ul className='menu-list'>
+            <li><span>User Information</span></li>
+            <li><span onClick={handleLogout}>Logout</span></li>
+          </ul>
+      )}
             </li>
           ) : (
             <>

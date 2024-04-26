@@ -9,9 +9,12 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false); // State for tracking loading
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     try {
       const response = await axios.post(API_URL, {
@@ -20,13 +23,15 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
       });
 
       if (response.data.isSuccess) {
-        localStorage.setItem('token', response.data.data.accessToken);
+        localStorage.setItem("token", response.data.data.accessToken);
         onLoginSuccess();
       } else {
         onLoginFail(response.data.messages[0].content);
       }
     } catch (error) {
-      console.log("Error:", error.response);
+      onLoginFail(error.response.statusText);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -62,8 +67,12 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
           </label>
           <span>Forgot password</span>
         </div>
-        <button type="submit" className="login-button">
-          Login
+        <button
+          type="submit"
+          disabled={loading}
+          className={loading ? "login-button-disabled" : "login-button"}
+        >
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>

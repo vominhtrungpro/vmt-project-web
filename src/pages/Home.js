@@ -32,10 +32,9 @@ function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Kiểm tra nếu có token trong local storage khi component được tạo
     const token = localStorage.getItem("token");
     if (token) {
-      setIsLoggedIn(true); // Đã đăng nhập
+      setIsLoggedIn(true);
     }
   }, []);
 
@@ -75,7 +74,7 @@ function Home() {
         onLoginSuccess={handleLoginSuccess}
         onLoginFail={handleLoginFail}
       />
-      <ToastContainer />
+      <ToastContainer position="top-center"/>
     </div>
   );
 }
