@@ -6,6 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NavBar from "./components/NavBar";
 
+Modal.setAppElement('#root'); 
+
 const CustomModal = ({ isOpen, closeModal, onLoginSuccess, onLoginFail }) => {
   const customStyles = {
     content: {

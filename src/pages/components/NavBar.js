@@ -20,7 +20,7 @@ function NavBar({ isLoggedIn,handleLogout, openModal }) {
       <nav className="navbar">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <span className="nav-link">Home</span>
+            <span className="nav-link" onClick={() => {window.location.href = '/'}}>Home</span>
           </li>
         </ul>
         <ul className="navbar-nav right">
@@ -29,7 +29,7 @@ function NavBar({ isLoggedIn,handleLogout, openModal }) {
                 <img src={getAvatarUrl()} alt="Avatar" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} onClick={()=>setShowTool(!showTool)}/>
               {showTool && (
           <ul className='menu-list'>
-            <li><span>User Information</span></li>
+            <li><span onClick={() => {window.location.href = '/user-info'}}>User Information</span></li>
             <li><span onClick={handleLogout}>Logout</span></li>
           </ul>
       )}

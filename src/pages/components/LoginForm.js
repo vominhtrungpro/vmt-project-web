@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const API_URL =
-  "https://vmt-api-practice.azurewebsites.net/api/Authentication/login";
+  "https://vmt-api-practice.azurewebsites.net/";
 
 function LoginForm({ onLoginSuccess, onLoginFail }) {
   const [username, setUsername] = useState("");
@@ -17,7 +17,7 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
     setLoading(true);
 
     try {
-      const response = await axios.post(API_URL, {
+      const response = await axios.post(API_URL + "api/Authentication/login", {
         email: username,
         password: password,
       });
