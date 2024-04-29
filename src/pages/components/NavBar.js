@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { jwtDecode } from 'jwt-decode'
 
-function NavBar({ isLoggedIn,handleLogout, openModal }) {
+function NavBar({ isLoggedIn, handleLogout, openModal }) {
     const [showTool,setShowTool] = useState(false)
     
     const getAvatarUrl = () => {

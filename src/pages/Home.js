@@ -5,6 +5,7 @@ import LoginForm from "./components/LoginForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NavBar from "./components/NavBar";
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement('#root'); 
 
@@ -32,6 +33,7 @@ const CustomModal = ({ isOpen, closeModal, onLoginSuccess, onLoginFail }) => {
 
 function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -61,6 +63,7 @@ function Home() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+    navigate("/");
   };
 
   const handleLoginFail = (message) => {

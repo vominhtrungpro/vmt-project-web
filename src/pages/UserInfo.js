@@ -137,6 +137,7 @@ function UserInfo() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+    navigate("/");
   };
 
   const handleLoginFail = (message) => {
