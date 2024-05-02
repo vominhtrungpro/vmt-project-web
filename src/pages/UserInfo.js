@@ -75,7 +75,7 @@ function UserInfo() {
           setAvatarUrl(data[0]);
         }
       } catch (error) {
-        notify("Error upload image:", error);
+        notify("Error:", error);
       }
     } else {
       navigate("/");
