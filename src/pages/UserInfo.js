@@ -75,7 +75,7 @@ function UserInfo() {
           setAvatarUrl(data[0]);
         }
       } catch (error) {
-        notify("Error update profile:", error);
+        notify("Error upload image:", error);
       }
     } else {
       navigate("/");
@@ -92,7 +92,7 @@ function UserInfo() {
       console.log(avatarUrl)
       try {
         const response = await axios.post(
-          "https://localhost:7130/api/UserInfo",
+          API_URL + "/api/UserInfo",
           {
             userId: jwtDecode(token).UserId,
             avatarUrl: avatarUrl,
@@ -113,7 +113,8 @@ function UserInfo() {
           notify("Failed: ",data.messages.content);
         }
       } catch (error) {
-        notify("Error upload image:", error);
+        notify("Error update profile:", error);
+        console.log(error)
       } finally {
         setLoadingEdit(false);
       }
