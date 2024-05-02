@@ -42,6 +42,7 @@ function UserInfo() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingEdit, setLoadingEdit] = useState(false);
   const navigate = useNavigate();
 
   const handleChangeAvatar = async (e) => {
@@ -71,10 +72,50 @@ function UserInfo() {
         );
         const data = response.data.data;
         if (data) {
-          setAvatarUrl(data);
+          setAvatarUrl(data[0]);
         }
       } catch (error) {
         notify("Error upload image:", error);
+      }
+    } else {
+      navigate("/");
+    }
+    setIsLoading(false);
+  };
+
+  const handleEditInfo = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      setLoadingEdit(true);
+      console.log(avatarUrl)
+      try {
+        const response = await axios.post(
+          "https://localhost:7130/api/UserInfo",
+          {
+            userId: jwtDecode(token).UserId,
+            avatarUrl: avatarUrl,
+            firstName: firstName,
+            lastName: lastName
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + token
+            },
+          }
+        );
+        const data = response.data;
+        if (data.isSuccess) {
+          notify("Success");
+        } else 
+        {
+          notify("Failed: ",data.messages.content);
+        }
+      } catch (error) {
+        notify("Error upload image:", error);
+      } finally {
+        setLoadingEdit(false);
       }
     } else {
       navigate("/");
@@ -181,7 +222,7 @@ function UserInfo() {
             </div>
             <div className="user-details">
               <div>
-                <form>
+                <form onSubmit={handleEditInfo}>
                   <div>
                     <label className="user-name-label">User Name: </label>
                     <span className="user-name-span">{userInfo.userName}</span>
@@ -203,6 +244,15 @@ function UserInfo() {
                       onChange={(e) => setLastName(e.target.value)}
                       placeholder="Your name.."
                     />
+                  </div>
+                  <div>
+                  <button
+          type="submit"
+          disabled={loadingEdit}
+          className={loadingEdit ? "login-button-disabled" : "login-button"}
+        >
+          {loadingEdit ? "Editing in..." : "Edit"}
+        </button>
                   </div>
                 </form>
               </div>
