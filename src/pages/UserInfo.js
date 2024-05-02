@@ -75,7 +75,7 @@ function UserInfo() {
           setAvatarUrl(data[0]);
         }
       } catch (error) {
-        notify("Error:", error);
+        notify("Error update profile:", error);
       }
     } else {
       navigate("/");
