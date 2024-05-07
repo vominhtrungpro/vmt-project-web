@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { jwtDecode } from 'jwt-decode'
 
-function NavBar({ isLoggedIn, handleLogout, openModal }) {
+function NavBar({ isLoggedIn, handleLogout, openModalLogin, openModalRegister }) {
     const [showTool,setShowTool] = useState(false)
     
     const getAvatarUrl = () => {
@@ -37,12 +37,14 @@ function NavBar({ isLoggedIn, handleLogout, openModal }) {
           ) : (
             <>
               <li className="nav-item">
-                <span className="nav-link" onClick={openModal}>
+                <span className="nav-link" onClick={openModalLogin}>
                   Login
                 </span>
               </li>
               <li className="nav-item">
-                <span className="nav-link">Register</span>
+              <span className="nav-link" onClick={openModalRegister}>
+                  Register
+                </span>
               </li>
             </>
           )}

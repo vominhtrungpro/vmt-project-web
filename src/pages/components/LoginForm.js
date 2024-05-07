@@ -1,8 +1,7 @@
 import "./LoginForm.css";
 import React, { useState } from "react";
 import axios from "axios";
-import { useGoogleLogin } from '@react-oauth/google';
-
+import { useGoogleLogin } from "@react-oauth/google";
 
 const API_URL = "https://vmt-api-practice.azurewebsites.net/";
 
@@ -14,12 +13,15 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
 
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async ({ access_token }) => {
-      console.log(access_token)
+      console.log(access_token);
       try {
-        const response = await axios.post(API_URL + "api/Authentication/login-google", {
-          token: access_token
-        });
-  
+        const response = await axios.post(
+          API_URL + "api/Authentication/login-google",
+          {
+            token: access_token,
+          }
+        );
+
         if (response.data.isSuccess) {
           localStorage.setItem("token", response.data.data.accessToken);
           onLoginSuccess();
@@ -33,7 +35,7 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
       }
     },
   });
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -59,8 +61,6 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
   };
   return (
     <div className="login-modal">
-      {" "}
-      {/* Apply CSS class to the containing div */}
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -99,9 +99,8 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
         </button>
       </form>
       <div>
-      <span>Or login with</span> 
+        <span>Or login with</span>
       </div>
-      
       <button onClick={() => loginWithGoogle()}>Google</button>
     </div>
   );

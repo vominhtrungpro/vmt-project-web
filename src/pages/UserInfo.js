@@ -1,7 +1,6 @@
 import "./UserInfo.css";
 import Modal from "react-modal";
 import React, { useState, useEffect } from "react";
-import LoginForm from "./components/LoginForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NavBar from "./components/NavBar";
@@ -12,28 +11,6 @@ import axios from "axios";
 Modal.setAppElement("#root");
 
 const API_URL = "https://vmt-api-practice.azurewebsites.net/";
-
-const CustomModal = ({ isOpen, closeModal, onLoginSuccess, onLoginFail }) => {
-  const customStyles = {
-    content: {
-      width: "50%",
-      height: "50%",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-    },
-  };
-  return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={closeModal}
-      contentLabel="Example Modal"
-      style={customStyles}
-    >
-      <LoginForm onLoginSuccess={onLoginSuccess} onLoginFail={onLoginFail} />
-    </Modal>
-  );
-};
 
 function UserInfo() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -89,7 +66,7 @@ function UserInfo() {
     if (token) {
       setIsLoggedIn(true);
       setLoadingEdit(true);
-      console.log(avatarUrl)
+      console.log(avatarUrl);
       try {
         const response = await axios.post(
           API_URL + "/api/UserInfo",
@@ -97,24 +74,23 @@ function UserInfo() {
             userId: jwtDecode(token).UserId,
             avatarUrl: avatarUrl,
             firstName: firstName,
-            lastName: lastName
+            lastName: lastName,
           },
           {
             headers: {
-              Authorization: "Bearer " + token
+              Authorization: "Bearer " + token,
             },
           }
         );
         const data = response.data;
         if (data.isSuccess) {
           notify("Success");
-        } else 
-        {
-          notify("Failed: ",data.messages.content);
+        } else {
+          notify("Failed: ", data.messages.content);
         }
       } catch (error) {
         notify("Error update profile:", error);
-        console.log(error)
+        console.log(error);
       } finally {
         setLoadingEdit(false);
       }
@@ -138,12 +114,20 @@ function UserInfo() {
               },
             }
           );
+          console.log(response);
           const data = response.data.data;
           if (data) {
             setUserInfo(data);
-            setFirstName(data.userInfo.firstName);
-            setLastName(data.userInfo.lastName);
-            setAvatarUrl(data.userInfo.avatarUrl);
+            if (!data.userInfo) {
+              notify("Info not found, please update!");
+              setFirstName("");
+              setLastName("");
+              setAvatarUrl("");
+            } else {
+              setFirstName(data.userInfo.firstName);
+              setLastName(data.userInfo.lastName);
+              setAvatarUrl(data.userInfo.avatarUrl);
+            }
           }
         } catch (error) {
           notify("Error get user info:", error);
@@ -160,45 +144,15 @@ function UserInfo() {
 
   const notify = (message) => toast(message);
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  const handleLoginSuccess = () => {
-    notify("Login success!");
-    closeModal();
-    setIsLoggedIn(true);
-  };
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     navigate("/");
   };
 
-  const handleLoginFail = (message) => {
-    notify(message);
-  };
-
   return (
     <div>
-      <NavBar
-        isLoggedIn={isLoggedIn}
-        handleLogout={handleLogout}
-        openModal={openModal}
-      />
-      <CustomModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        onLoginSuccess={handleLoginSuccess}
-        onLoginFail={handleLoginFail}
-      />
+      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       <div className="user-info-container">
         <h2>User Information</h2>
         {userInfo ? (
@@ -206,7 +160,13 @@ function UserInfo() {
             <div className="avatar-container">
               {isLoading ? (
                 <label htmlFor="avatarInput">
-                  <img src={"https://vmtprojectstorage.blob.core.windows.net/image-blobs/240429_094835443_loading.gif"} className="avatar" alt="User Avatar" />
+                  <img
+                    src={
+                      "https://vmtprojectstorage.blob.core.windows.net/image-blobs/240429_094835443_loading.gif"
+                    }
+                    className="avatar"
+                    alt="User Avatar"
+                  />
                 </label>
               ) : (
                 <label htmlFor="avatarInput">
@@ -247,13 +207,15 @@ function UserInfo() {
                     />
                   </div>
                   <div>
-                  <button
-          type="submit"
-          disabled={loadingEdit}
-          className={loadingEdit ? "login-button-disabled" : "login-button"}
-        >
-          {loadingEdit ? "Editing in..." : "Edit"}
-        </button>
+                    <button
+                      type="submit"
+                      disabled={loadingEdit}
+                      className={
+                        loadingEdit ? "login-button-disabled" : "login-button"
+                      }
+                    >
+                      {loadingEdit ? "Editing in..." : "Edit"}
+                    </button>
                   </div>
                 </form>
               </div>

@@ -6,10 +6,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NavBar from "./components/NavBar";
 import { useNavigate } from "react-router-dom";
+import RegisterForm from "./components/RegisterForm";
 
 Modal.setAppElement('#root'); 
 
-const CustomModal = ({ isOpen, closeModal, onLoginSuccess, onLoginFail }) => {
+const CustomModalLogin = ({ isOpen, closeModal, onLoginSuccess, onLoginFail }) => {
   const customStyles = {
     content: {
       width: "50%",
@@ -31,6 +32,28 @@ const CustomModal = ({ isOpen, closeModal, onLoginSuccess, onLoginFail }) => {
   );
 };
 
+const CustomModalRegister = ({ isOpen, closeModal, onRegisterSuccess, onRegisterFail }) => {
+  const customStyles = {
+    content: {
+      width: "50%",
+      height: "50%",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={closeModal}
+      contentLabel="Example Modal"
+      style={customStyles}
+    >
+      <RegisterForm onRegisterSuccess={onRegisterSuccess} onRegisterFail={onRegisterFail} />
+    </Modal>
+  );
+};
+
 function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -44,20 +67,33 @@ function Home() {
 
   const notify = (message) => toast(message);
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenModalLogin, setIsOpenModalLogin] = useState(false);
+  const [isOpenModalRegister, setIsOpenModalRegister] = useState(false);
 
-  const openModal = () => {
-    setIsOpen(true);
+  const openModalLogin = () => {
+    setIsOpenModalLogin(true);
   };
 
-  const closeModal = () => {
-    setIsOpen(false);
+  const openModalRegister = () => {
+    setIsOpenModalRegister(true);
+  };
+
+  const closeModalLogin = () => {
+    setIsOpenModalLogin(false);
+  };
+
+  const closeModalRegister = () => {
+    setIsOpenModalRegister(false);
   };
 
   const handleLoginSuccess = () => {
     notify("Login success!");
-    closeModal();
+    closeModalLogin();
     setIsLoggedIn(true);
+  };
+
+  const handleRegisterSuccess = () => {
+    notify("Register success, Check your mail for password please!");
   };
 
   const handleLogout = () => {
@@ -70,14 +106,24 @@ function Home() {
     notify(message);
   };
 
+  const handleRegisterFail = (message) => {
+    notify(message);
+  };
+
   return (
     <div>
-      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} openModal ={openModal}/>
-      <CustomModal
-        isOpen={isOpen}
-        closeModal={closeModal}
+      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} openModalLogin ={openModalLogin} openModalRegister={openModalRegister}/>
+      <CustomModalLogin
+        isOpen={isOpenModalLogin}
+        closeModal={closeModalLogin}
         onLoginSuccess={handleLoginSuccess}
         onLoginFail={handleLoginFail}
+      />
+      <CustomModalRegister
+        isOpen={isOpenModalRegister}
+        closeModal={closeModalRegister}
+        onRegisterSuccess={handleRegisterSuccess}
+        onRegisterFail={handleRegisterFail}
       />
       <ToastContainer position="top-center"/>
     </div>
