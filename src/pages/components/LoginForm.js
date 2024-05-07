@@ -1,16 +1,39 @@
 import "./LoginForm.css";
 import React, { useState } from "react";
 import axios from "axios";
+import { useGoogleLogin } from '@react-oauth/google';
 
-const API_URL =
-  "https://vmt-api-practice.azurewebsites.net/";
+
+const API_URL = "https://vmt-api-practice.azurewebsites.net/";
 
 function LoginForm({ onLoginSuccess, onLoginFail }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [loading, setLoading] = useState(false); // State for tracking loading
+  const [loading, setLoading] = useState(false);
 
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: async ({ access_token }) => {
+      console.log(access_token)
+      try {
+        const response = await axios.post(API_URL + "api/Authentication/login-google", {
+          token: access_token
+        });
+  
+        if (response.data.isSuccess) {
+          localStorage.setItem("token", response.data.data.accessToken);
+          onLoginSuccess();
+        } else {
+          onLoginFail(response.data.messages[0].content);
+        }
+      } catch (error) {
+        onLoginFail(error.response.statusText);
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -75,6 +98,11 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+      <div>
+      <span>Or login with</span> 
+      </div>
+      
+      <button onClick={() => loginWithGoogle()}>Google</button>
     </div>
   );
 }
