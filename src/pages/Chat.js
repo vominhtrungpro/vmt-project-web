@@ -5,19 +5,129 @@ import NavBar from "./components/NavBar";
 import { useNavigate } from "react-router-dom";
 import ChatForm from "./components/ChatForm";
 import * as signalR from "@microsoft/signalr";
+import { jwtDecode } from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 
 Modal.setAppElement("#root");
+
+const CustomModalLogin = ({
+  isOpen,
+  closeModal,
+  onLoginSuccess,
+  onLoginFail,
+}) => {
+  const customStyles = {
+    content: {
+      width: "50%",
+      height: "50%",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={closeModal}
+      contentLabel="Example Modal"
+      style={customStyles}
+    >
+      <LoginForm onLoginSuccess={onLoginSuccess} onLoginFail={onLoginFail} />
+    </Modal>
+  );
+};
+
+const CustomModalRegister = ({
+  isOpen,
+  closeModal,
+  onRegisterSuccess,
+  onRegisterFail,
+}) => {
+  const customStyles = {
+    content: {
+      width: "50%",
+      height: "50%",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={closeModal}
+      contentLabel="Example Modal"
+      style={customStyles}
+    >
+      <RegisterForm
+        onRegisterSuccess={onRegisterSuccess}
+        onRegisterFail={onRegisterFail}
+      />
+    </Modal>
+  );
+};
 
 function Chat() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [connection, setConnection] = useState(null);
+  const [userName, setUsername] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+
+  const notify = (message) => toast(message);
+
+  const [isOpenModalLogin, setIsOpenModalLogin] = useState(false);
+  const [isOpenModalRegister, setIsOpenModalRegister] = useState(false);
+
+  const openModalLogin = () => {
+    setIsOpenModalLogin(true);
+  };
+
+  const openModalRegister = () => {
+    setIsOpenModalRegister(true);
+  };
+
+  const closeModalLogin = () => {
+    setIsOpenModalLogin(false);
+  };
+
+  const closeModalRegister = () => {
+    setIsOpenModalRegister(false);
+  };
+
+  const handleLoginSuccess = () => {
+    notify("Login success!");
+    closeModalLogin();
+    setIsLoggedIn(true);
+  };
+
+  const handleRegisterSuccess = () => {
+    notify("Register success, Check your mail for password please!");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
+  const handleLoginFail = (message) => {
+    notify(message);
+  };
+
+  const handleRegisterFail = (message) => {
+    notify(message);
+  };
 
   const sendMessage = (m) => {
-    const newMessage = { content: m, username: 'test', avatarUrl: 'url' };
-
-    console.log("Sending message:", newMessage);
+    if (!isLoggedIn) {
+      notify("Login to use this!");
+      return;
+    }
+    const newMessage = { content: m, username: userName, avatarUrl: avatarUrl };
     if (connection) {
       connection
         .invoke("SendMessage", newMessage)
@@ -28,9 +138,19 @@ function Chat() {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      setAvatarUrl(decoded.AvatarUrl);
+      setUsername(decoded.Username);
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  useEffect(() => {
     const newConnection = new signalR.HubConnectionBuilder()
       .withUrl("https://vmt-api-practice.azurewebsites.net/message", {
-        transport: signalR.HttpTransportType.WebSockets, // Sử dụng giao thức WebSocket
+        transport: signalR.HttpTransportType.WebSockets,
         skipNegotiation: true,
       })
       .withAutomaticReconnect()
@@ -40,8 +160,14 @@ function Chat() {
   }, []);
 
   useEffect(() => {
+    const handleMessage = (data) => {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { content: data.content, sender: data.username },
+      ]);
+    };
+
     if (connection) {
-      // Bắt đầu kết nối
       connection
         .start()
         .then(() => {
@@ -49,29 +175,23 @@ function Chat() {
         })
         .catch((err) => console.error("SignalR connection error: ", err));
 
-      // Lắng nghe các sự kiện từ hub
-      connection.on("ReceiveMessage", (data) => {
-        console.log("Received data from SignalR:", data);
-        // Xử lý dữ liệu nhận được ở đây
-      });
+      connection.on("Message", handleMessage);
 
-      // Cleanup khi component unmount
       return () => {
-        connection.off("YOUR_EVENT_NAME");
+        connection.off("Message");
         connection.stop();
       };
     }
   }, [connection]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    navigate("/");
-  };
-
   return (
     <div>
-      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <NavBar
+        isLoggedIn={isLoggedIn}
+        handleLogout={handleLogout}
+        openModalLogin={openModalLogin}
+        openModalRegister={openModalRegister}
+      />
       <div className="chat-container">
         <h2>Chat</h2>
         <div>
@@ -88,6 +208,19 @@ function Chat() {
           </div>
         </div>
       </div>
+      <CustomModalLogin
+        isOpen={isOpenModalLogin}
+        closeModal={closeModalLogin}
+        onLoginSuccess={handleLoginSuccess}
+        onLoginFail={handleLoginFail}
+      />
+      <CustomModalRegister
+        isOpen={isOpenModalRegister}
+        closeModal={closeModalRegister}
+        onRegisterSuccess={handleRegisterSuccess}
+        onRegisterFail={handleRegisterFail}
+      />
+      <ToastContainer position="top-center" />
     </div>
   );
 }
