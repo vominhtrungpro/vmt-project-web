@@ -6,6 +6,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.0",
     "@react-oauth/google": "^0.12.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -18,6 +19,7 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.23.0",
     "react-scripts": "5.0.1",
+    "react-signalr": "^0.2.19",
     "react-toastify": "^10.0.5",
     "web-vitals": "^2.1.4"
   },

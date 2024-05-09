@@ -1,0 +1,118 @@
+.navbar {
+  background-color: #333;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.nav-item {
+  margin-right: 10px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
+.nav-link:hover {
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  background-color: #555;
+}
+
+.right {
+  margin-left: auto;
+}
+.menu {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-y: inherit;
+}
+
+.menu-list {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: auto;
+  right: 0;
+  background-color: #333;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  list-style: none;
+  margin: 0;
+  width: 200px;
+}
+
+.menu-list li {
+  padding: 5px 0;
+  color: #fff;
+}
+
+.menu-list li:hover {
+  color: #fff;
+  cursor: pointer;
+  background-color: #555;
+}
+
+.menu-list li span {
+  padding: 10px;
+}
+
+.chat-container {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  margin-top: 50px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+form div {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input {
+  display: block;
+  width: 200px;
+  height: 20px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
