@@ -29,7 +29,7 @@ function Chat() {
 
   useEffect(() => {
     const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:7130/message", {
+      .withUrl("https://vmt-api-practice.azurewebsites.net/message", {
         transport: signalR.HttpTransportType.WebSockets, // Sử dụng giao thức WebSocket
         skipNegotiation: true,
       })
