@@ -19,7 +19,7 @@ const ChatForm = ({ sendMessage }) => {
         onChange={(e) => setMessage(e.target.value)}
         style={{ marginRight: "8px" }}
       />
-      <button type="submit">Send</button>
+      <button type="submit" style={{ display: "none" }}>Send</button>
     </form>
   );
 };

@@ -134,7 +134,7 @@ function Chat() {
         .catch((err) => console.error("Error sending message: ", err));
     }
 
-    setMessages([...messages, { content: m, sender: "me" }]);
+    //setMessages([...messages, { content: m, sender: "me" }]);
   };
 
   useEffect(() => {
@@ -142,7 +142,7 @@ function Chat() {
     if (token) {
       const decoded = jwtDecode(token);
       setAvatarUrl(decoded.AvatarUrl);
-      setUsername(decoded.Username);
+      setUsername(decoded.UserName);
       setIsLoggedIn(true);
     }
   }, []);
@@ -161,10 +161,33 @@ function Chat() {
 
   useEffect(() => {
     const handleMessage = (data) => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { content: data.content, sender: data.username },
-      ]);
+      setMessages((prevMessages) => {
+        if (
+          prevMessages.length > 0 &&
+          prevMessages[prevMessages.length - 1].name === data.username
+        ) {
+          console.log(prevMessages);
+          return [
+            ...prevMessages.slice(0, -1),
+            {
+              ...prevMessages[prevMessages.length - 1],
+              content: [
+                ...prevMessages[prevMessages.length - 1].content,
+                data.content,
+              ],
+            },
+          ];
+        } else {
+          return [
+            ...prevMessages,
+            {
+              content: [data.content],
+              name: data.username,
+              avatar: data.avatarUrl,
+            },
+          ];
+        }
+      });
     };
 
     if (connection) {
@@ -197,9 +220,23 @@ function Chat() {
         <div>
           <div className="message-list">
             {messages.map((msg, index) => (
-              <div key={index}>
-                <span>{msg.sender}: </span>
-                <span>{msg.content}</span>
+              <div className="message" key={index}>
+                <img className="user-img" src={msg.avatar} alt="sender" />
+                <div className="message-text">
+                  <span className="message-username">{msg.name}</span>
+                  {/* Check if msg.content is an array */}
+                  {Array.isArray(msg.content) ? (
+                    // If it's an array, map over it to render each string separately
+                    msg.content.map((content, index) => (
+                      <span className="message-content" key={index}>
+                        {content}
+                      </span>
+                    ))
+                  ) : (
+                    // If it's a string, render it directly
+                    <span className="message-content">{msg.content}</span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
