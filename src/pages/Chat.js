@@ -149,10 +149,7 @@ function Chat() {
 
   useEffect(() => {
     const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl("https://vmt-api-practice.azurewebsites.net/message", {
-        transport: signalR.HttpTransportType.WebSockets,
-        skipNegotiation: true,
-      })
+      .withUrl("https://vmt-api-practice.azurewebsites.net/message")
       .withAutomaticReconnect()
       .build();
 
@@ -198,10 +195,10 @@ function Chat() {
         })
         .catch((err) => console.error("SignalR connection error: ", err));
 
-      connection.on("Message", handleMessage);
+      connection.on("ReceiveMessage", handleMessage);
 
       return () => {
-        connection.off("Message");
+        connection.off("ReceiveMessage");
         connection.stop();
       };
     }
