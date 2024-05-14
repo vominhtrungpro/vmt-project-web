@@ -149,7 +149,10 @@ function Chat() {
 
   useEffect(() => {
     const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl("https://vmt-api-practice.azurewebsites.net/message")
+      .withUrl("https://vmt-api-practice.azurewebsites.net/message",{
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets
+      })
       .withAutomaticReconnect()
       .build();
 
