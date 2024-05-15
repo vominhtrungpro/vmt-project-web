@@ -133,8 +133,6 @@ function Chat() {
         .invoke("SendMessage", newMessage)
         .catch((err) => console.error("Error sending message: ", err));
     }
-
-    //setMessages([...messages, { content: m, sender: "me" }]);
   };
 
   useEffect(() => {
@@ -162,8 +160,7 @@ function Chat() {
         if (
           prevMessages.length > 0 &&
           prevMessages[prevMessages.length - 1].name === data.username
-        ) {
-          console.log(prevMessages);
+        ) {     
           return [
             ...prevMessages.slice(0, -1),
             {
