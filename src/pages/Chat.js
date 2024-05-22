@@ -81,6 +81,7 @@ function Chat() {
 
   const [isOpenModalLogin, setIsOpenModalLogin] = useState(false);
   const [isOpenModalRegister, setIsOpenModalRegister] = useState(false);
+  const [isElainaAnswer, setIsElainaAnswer] = useState(false);
 
   const openModalLogin = () => {
     setIsOpenModalLogin(true);
@@ -122,8 +123,12 @@ function Chat() {
     notify(message);
   };
 
-
   const callElainaAI = async (message) => {
+    if (isElainaAnswer) {
+      notify("Elaina is answering, Please wait!");
+      return;
+    }
+    setIsElainaAnswer(true);
     try {
       const response = await fetch(
         "https://vmt-api-assistant.azurewebsites.net/api/run",
@@ -141,14 +146,17 @@ function Chat() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
 
-      let messageContent = '';
+      let messageContent = "";
 
       while (true) {
         const { done, value } = await reader.read();
 
-        
         if (done) {
-          const newMessage = { content: messageContent, username: 'Elaina AI', avatarUrl: '' };
+          const newMessage = {
+            content: messageContent,
+            username: "Elaina AI",
+            avatarUrl: "",
+          };
           if (connection) {
             connection
               .invoke("SendMessage", newMessage)
@@ -159,16 +167,18 @@ function Chat() {
         }
 
         const chunk = decoder.decode(value, { stream: true });
-        const parts = chunk.split('\n\n');
+        const parts = chunk.split("\n\n");
         for (const part of parts) {
-          if (part.trim() !== '') {
-            const cleanedMessage = part.replace('data: ', '');
-            messageContent += cleanedMessage
+          if (part.trim() !== "") {
+            const cleanedMessage = part.replace("data: ", "");
+            messageContent += cleanedMessage;
           }
         }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setIsElainaAnswer(false);
     }
   };
 
@@ -177,8 +187,12 @@ function Chat() {
       notify("Login to use this!");
       return;
     }
-    if (m.includes("@Elaina")) { 
-      const newMessage = { content: m, username: userName, avatarUrl: avatarUrl };
+    if (m.includes("@Elaina")) {
+      const newMessage = {
+        content: m,
+        username: userName,
+        avatarUrl: avatarUrl,
+      };
       if (connection) {
         connection
           .invoke("SendMessage", newMessage)
@@ -294,6 +308,9 @@ function Chat() {
               </div>
             ))}
           </div>
+          {isElainaAnswer && (
+            <div className="loading-indicator">Elaina is answering...</div>
+          )}
           <div className="chat-form-container">
             <ChatForm sendMessage={sendMessage} />
           </div>
