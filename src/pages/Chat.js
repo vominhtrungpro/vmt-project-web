@@ -122,9 +122,69 @@ function Chat() {
     notify(message);
   };
 
+
+  const callElainaAI = async (message) => {
+    try {
+      const response = await fetch(
+        "https://vmt-api-assistant.azurewebsites.net/api/run",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            thread_id: "thread_zFqdLrW8sqMXkWu3zPHe0ACh",
+            message: message,
+          }),
+        }
+      );
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let messageContent = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        
+        if (done) {
+          // eslint-disable-next-line
+          setMessages(prevMessages => ([...prevMessages, {
+            content: [messageContent],
+            name: 'Elaina',
+            avatar: 'url',
+          }]));
+
+          break;
+        }
+
+        const chunk = decoder.decode(value, { stream: true });
+        const parts = chunk.split('\n\n');
+        for (const part of parts) {
+          if (part.trim() !== '') {
+            const cleanedMessage = part.replace('data: ', '');
+            messageContent += cleanedMessage
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const sendMessage = (m) => {
     if (!isLoggedIn) {
       notify("Login to use this!");
+      return;
+    }
+    if (m.includes("@Elaina")) { 
+      const newMessage = { content: m, username: userName, avatarUrl: avatarUrl };
+      if (connection) {
+        connection
+          .invoke("SendMessage", newMessage)
+          .catch((err) => console.error("Error sending message: ", err));
+      }
+      callElainaAI(m);
       return;
     }
     const newMessage = { content: m, username: userName, avatarUrl: avatarUrl };
@@ -160,7 +220,7 @@ function Chat() {
         if (
           prevMessages.length > 0 &&
           prevMessages[prevMessages.length - 1].name === data.username
-        ) {     
+        ) {
           return [
             ...prevMessages.slice(0, -1),
             {
