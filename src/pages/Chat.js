@@ -148,12 +148,12 @@ function Chat() {
 
         
         if (done) {
-          // eslint-disable-next-line
-          setMessages(prevMessages => ([...prevMessages, {
-            content: [messageContent],
-            name: 'Elaina',
-            avatar: 'url',
-          }]));
+          const newMessage = { content: messageContent, username: 'Elaina AI', avatarUrl: '' };
+          if (connection) {
+            connection
+              .invoke("SendMessage", newMessage)
+              .catch((err) => console.error("Error sending message: ", err));
+          }
 
           break;
         }
