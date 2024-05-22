@@ -289,19 +289,18 @@ function Chat() {
           <div className="message-list">
             {messages.map((msg, index) => (
               <div className="message" key={index}>
-                <img className="user-img" src={msg.avatar} alt="sender" />
+                <div>
+                  <img className="user-img" src={msg.avatar} alt="sender" />
+                </div>
                 <div className="message-text">
                   <span className="message-username">{msg.name}</span>
-                  {/* Check if msg.content is an array */}
                   {Array.isArray(msg.content) ? (
-                    // If it's an array, map over it to render each string separately
                     msg.content.map((content, index) => (
                       <span className="message-content" key={index}>
                         {content}
                       </span>
                     ))
                   ) : (
-                    // If it's a string, render it directly
                     <span className="message-content">{msg.content}</span>
                   )}
                 </div>
