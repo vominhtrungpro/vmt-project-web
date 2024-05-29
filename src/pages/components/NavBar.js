@@ -43,16 +43,6 @@ function NavBar({
               Chat
             </span>
           </li>
-          <li className="nav-item">
-            <span
-              className="nav-link"
-              onClick={() => {
-                window.location.href = "/profile";
-              }}
-            >
-              My Profile
-            </span>
-          </li>
         </ul>
         <ul className="navbar-nav right">
           {isLoggedIn ? (
