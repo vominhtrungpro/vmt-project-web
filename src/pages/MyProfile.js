@@ -8,7 +8,9 @@ import { Link, Element } from "react-scroll";
 Modal.setAppElement("#root");
 
 function MyProfile() {
-  const [profileData, setProfileData] = useState(null);
+  const [aboutMeData, setAboutMeData] = useState([]);
+  const [myCareerData, setMyCareerData] = useState([]);
+  const [myProjectData, setMyProjectData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +23,23 @@ function MyProfile() {
             },
           }
         );
-        setProfileData(response.data.data);
+        const profileData = response.data.data;
+
+        profileData.forEach((item) => {
+          switch (item.slug) {
+            case "about-me":
+              setAboutMeData((prevData) => [...prevData, item]);
+              break;
+            case "my-career":
+              setMyCareerData((prevData) => [...prevData, item]);
+              break;
+            case "my-project":
+              setMyProjectData((prevData) => [...prevData, item]);
+              break;
+            default:
+              break;
+          }
+        });
       } catch (error) {
         console.error("Error:", error);
       }
@@ -56,40 +74,39 @@ function MyProfile() {
         <h1>Welcome to my site!</h1>
         <span>This is my personal site, hope you enjoy it!</span>
       </div>
-      {profileData &&
-        profileData.map((profile, index) => {
-          if (profile.slug === "about-me") {
+      <Element name="section1" className="section">
+        {aboutMeData &&
+          aboutMeData.map((item, index) => {
             return (
-              <Element name="section1" className="section">
-                <div key={index} className="introduce">
-                  <h1>{profile.name}</h1>
-                  <span>{profile.content}</span>
-                </div>
-              </Element>
+              <div key={index} className="introduce">
+                <h1>{item.name}</h1>
+                <span>{item.content}</span>
+              </div>
             );
-          }
-          if (profile.slug === "my-career") {
+          })}
+      </Element>
+      <Element name="section2" className="section">
+        {myCareerData &&
+          myCareerData.map((item, index) => {
             return (
-              <Element name="section2" className="section">
-                <div key={index} className="introduce">
-                  <h1>{profile.name}</h1>
-                  <span>{profile.content}</span>
-                </div>
-              </Element>
+              <div key={index} className="introduce">
+                <h1>{item.name}</h1>
+                <span>{item.content}</span>
+              </div>
             );
-          }
-          if (profile.slug === "my-project") {
+          })}
+      </Element>
+      <Element name="section3" className="section">
+        {myProjectData &&
+          myProjectData.map((item, index) => {
             return (
-              <Element name="section3" className="section">
-                <div key={index} className="introduce">
-                  <h1 dangerouslySetInnerHTML={{ __html: profile.name }} />
-                  <div dangerouslySetInnerHTML={{ __html: profile.content }} />
-                </div>
-              </Element>
+              <div key={index} className="introduce">
+                <h1 dangerouslySetInnerHTML={{ __html: item.name }} />
+                <div dangerouslySetInnerHTML={{ __html: item.content }} />
+              </div>
             );
-          }
-          return null;
-        })}
+          })}
+      </Element>
     </div>
   );
 }
