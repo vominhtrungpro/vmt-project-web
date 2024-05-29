@@ -172,15 +172,32 @@ function MyProfile() {
         <div>About me</div>
       </div>
       <div className="introduce">
-        <h1>Welcome to my blog!</h1>
-        <span>This is my personal blog, hope you enjoy it!</span>
+        <h1>Welcome to my site!</h1>
+        <span>This is my personal site, hope you enjoy it!</span>
       </div>
       {profileData &&
         profileData.map((profile, index) => {
           if (profile.slug === "about-me") {
             return (
               <div key={index} className="introduce">
-                <h1>{profile.content}</h1>
+                <h1>{profile.name}</h1>
+                <span>{profile.content}</span>
+              </div>
+            )
+          }
+          if (profile.slug === "my-career") {
+            return (
+              <div key={index} className="introduce">
+                <h1>{profile.name}</h1>
+                <span>{profile.content}</span>
+              </div>
+            )
+          }
+          if (profile.slug === "my-project") {
+            return (
+              <div key={index} className="introduce">
+                <h1>{profile.name}</h1>
+                <span>{profile.content}</span>
               </div>
             )
           }
