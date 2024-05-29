@@ -92,7 +92,6 @@ function MyProfile() {
           }
         );
         setProfileData(response.data.data);
-        console.log(response.data.data);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -170,6 +169,8 @@ function MyProfile() {
       <ToastContainer position="top-center" />
       <div className="center-div">
         <div>About me</div>
+        <div>My career</div>
+        <div>My project</div>
       </div>
       <div className="introduce">
         <h1>Welcome to my site!</h1>
@@ -196,8 +197,8 @@ function MyProfile() {
           if (profile.slug === "my-project") {
             return (
               <div key={index} className="introduce">
-                <h1>{profile.name}</h1>
-                <span>{profile.content}</span>
+                <h1 dangerouslySetInnerHTML={{ __html: profile.name }} />
+                <div dangerouslySetInnerHTML={{ __html: profile.content }} />
               </div>
             )
           }
