@@ -112,7 +112,7 @@ function Chat() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
-    navigate("/");
+    navigate("/chat");
   };
 
   const handleLoginFail = (message) => {
