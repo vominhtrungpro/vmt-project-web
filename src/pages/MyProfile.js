@@ -141,19 +141,22 @@ function MyProfile() {
       <Element name="section3" className="section">
         <div className="introduce">
           <h1>My Project</h1>
+          <ol>
           {myProjectData &&
             myProjectData.map((item, index) => {
               return (
-                <div key={index}>
+                <li key={index}>
                   <span
                     style={{ cursor: "pointer" }}
                     onClick={() => openModal(item.content)}
                   >
                     {item.name}
                   </span>
-                </div>
+                </li>
               );
             })}
+</ol> 
+
         </div>
       </Element>
       <Element name="section4" className="section">
