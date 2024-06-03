@@ -7,10 +7,51 @@ import { Link, Element } from "react-scroll";
 
 Modal.setAppElement("#root");
 
+const CustomModal = ({
+  isOpen,
+  data,
+  closeModal
+}) => {
+  const customStyles = {
+    content: {
+      width: "50%",
+      height: "50%",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+  return (
+    <Modal
+      isOpen={isOpen}
+      contentLabel="Modal"
+      style={customStyles}
+      onRequestClose={closeModal} 
+    >
+      <div dangerouslySetInnerHTML={{ __html: data }} />
+    </Modal>
+  );
+};
+
 function MyProfile() {
   const [aboutMeData, setAboutMeData] = useState([]);
   const [myCareerData, setMyCareerData] = useState([]);
   const [myProjectData, setMyProjectData] = useState([]);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+
+
+  const openModal = (content) => { 
+    setIsOpenModal(true);
+    setModalContent(content);
+  };
+
+  const closeModal = () => {
+    setIsOpenModal(false);
+    setModalContent("");
+  };
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,16 +138,19 @@ function MyProfile() {
           })}
       </Element>
       <Element name="section3" className="section">
-        {myProjectData &&
-          myProjectData.map((item, index) => {
-            return (
-              <div key={index} className="introduce">
-                <h1 dangerouslySetInnerHTML={{ __html: item.name }} />
-                <div dangerouslySetInnerHTML={{ __html: item.content }} />
-              </div>
-            );
-          })}
+        <div className="introduce">
+          <h1>My Project</h1>
+          {myProjectData &&
+            myProjectData.map((item, index) => {
+              return (
+                <div key={index}>
+                  <span style={{ cursor: 'pointer' }} onClick={() => openModal(item.content)}>{item.name}</span>
+                </div>
+              );
+            })}
+        </div>
       </Element>
+      <CustomModal isOpen={isOpenModal} data={modalContent} closeModal={closeModal} />
     </div>
   );
 }
