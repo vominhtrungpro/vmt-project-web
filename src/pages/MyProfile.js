@@ -7,11 +7,7 @@ import { Link, Element } from "react-scroll";
 
 Modal.setAppElement("#root");
 
-const CustomModal = ({
-  isOpen,
-  data,
-  closeModal
-}) => {
+const CustomModal = ({ isOpen, data, closeModal }) => {
   const customStyles = {
     content: {
       width: "50%",
@@ -26,7 +22,7 @@ const CustomModal = ({
       isOpen={isOpen}
       contentLabel="Modal"
       style={customStyles}
-      onRequestClose={closeModal} 
+      onRequestClose={closeModal}
     >
       <div dangerouslySetInnerHTML={{ __html: data }} />
     </Modal>
@@ -40,8 +36,7 @@ function MyProfile() {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
-
-  const openModal = (content) => { 
+  const openModal = (content) => {
     setIsOpenModal(true);
     setModalContent(content);
   };
@@ -50,8 +45,6 @@ function MyProfile() {
     setIsOpenModal(false);
     setModalContent("");
   };
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -144,13 +137,22 @@ function MyProfile() {
             myProjectData.map((item, index) => {
               return (
                 <div key={index}>
-                  <span style={{ cursor: 'pointer' }} onClick={() => openModal(item.content)}>{item.name}</span>
+                  <span
+                    style={{ cursor: "pointer" }}
+                    onClick={() => openModal(item.content)}
+                  >
+                    {item.name}
+                  </span>
                 </div>
               );
             })}
         </div>
       </Element>
-      <CustomModal isOpen={isOpenModal} data={modalContent} closeModal={closeModal} />
+      <CustomModal
+        isOpen={isOpenModal}
+        data={modalContent}
+        closeModal={closeModal}
+      />
     </div>
   );
 }

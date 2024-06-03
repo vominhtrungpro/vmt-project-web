@@ -155,7 +155,8 @@ function Chat() {
           const newMessage = {
             content: messageContent,
             username: "Elaina AI",
-            avatarUrl: "https://vmtprojectstorage.blob.core.windows.net/image-blobs/240426_044846738_elaina.jpg",
+            avatarUrl:
+              "https://vmtprojectstorage.blob.core.windows.net/image-blobs/240426_044846738_elaina.jpg",
           };
           if (connection) {
             connection
