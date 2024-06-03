@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Link, Element } from "react-scroll";
+import { SocialIcon } from "react-social-icons";
 
 Modal.setAppElement("#root");
 
@@ -33,6 +34,7 @@ function MyProfile() {
   const [aboutMeData, setAboutMeData] = useState([]);
   const [myCareerData, setMyCareerData] = useState([]);
   const [myProjectData, setMyProjectData] = useState([]);
+  const [myContactData, setMyContacttData] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
@@ -70,6 +72,9 @@ function MyProfile() {
             case "my-project":
               setMyProjectData((prevData) => [...prevData, item]);
               break;
+            case "my-contact":
+              setMyContacttData((prevData) => [...prevData, item]);
+              break;
             default:
               break;
           }
@@ -92,15 +97,18 @@ function MyProfile() {
           </Link>
         </div>
         <div>
-          {" "}
           <Link to="section2" smooth={true} duration={500}>
             My career
           </Link>
         </div>
         <div>
-          {" "}
           <Link to="section3" smooth={true} duration={500}>
             My Project
+          </Link>
+        </div>
+        <div>
+          <Link to="section4" smooth={true} duration={500}>
+            Contact Me
           </Link>
         </div>
       </div>
@@ -114,7 +122,7 @@ function MyProfile() {
             return (
               <div key={index} className="introduce">
                 <h1>{item.name}</h1>
-                <span>{item.content}</span>
+                <div dangerouslySetInnerHTML={{ __html: item.content }} />
               </div>
             );
           })}
@@ -146,6 +154,21 @@ function MyProfile() {
                 </div>
               );
             })}
+        </div>
+      </Element>
+      <Element name="section4" className="section">
+        <div className="introduce">
+          <h1>My Contact</h1>
+          <div className="connect-text">
+          {myContactData &&
+            myContactData.map((item, index) => {
+              return (
+                <div key={index}>
+                  <SocialIcon url={item.content} className="social-icon"/>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </Element>
       <CustomModal

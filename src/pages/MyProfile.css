@@ -101,3 +101,19 @@
 .introduce {
   padding: 20px;
 }
+.contact-me-container {
+  margin-top: 20px;
+}
+
+.connect-text {
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.social-icon {
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
+}
+
