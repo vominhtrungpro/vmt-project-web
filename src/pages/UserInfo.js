@@ -84,7 +84,8 @@ function UserInfo() {
         );
         const data = response.data;
         if (data.isSuccess) {
-          notify("Success");
+          notify("Success, please login again!");
+          setTimeout(handleLogout, 3000); 
         } else {
           notify("Failed: ", data.messages.content);
         }
@@ -147,7 +148,7 @@ function UserInfo() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
-    navigate("/");
+    navigate("/chat");
   };
 
   return (

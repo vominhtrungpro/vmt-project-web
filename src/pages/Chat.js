@@ -102,7 +102,13 @@ function Chat() {
   const handleLoginSuccess = () => {
     notify("Login success!");
     closeModalLogin();
-    setIsLoggedIn(true);
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      setAvatarUrl(decoded.AvatarUrl);
+      setUsername(decoded.UserName);
+      setIsLoggedIn(true);
+    }
   };
 
   const handleRegisterSuccess = () => {

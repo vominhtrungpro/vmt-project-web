@@ -13,7 +13,6 @@ function LoginForm({ onLoginSuccess, onLoginFail }) {
 
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async ({ access_token }) => {
-      console.log(access_token);
       try {
         const response = await axios.post(
           API_URL + "api/Authentication/login-google",
