@@ -37,6 +37,7 @@ function MyProfile() {
   const [myContactData, setMyContacttData] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const openModal = (content) => {
     setIsOpenModal(true);
@@ -79,8 +80,11 @@ function MyProfile() {
               break;
           }
         });
+
+        setIsLoading(false);
       } catch (error) {
         console.error("Error:", error);
+        setIsLoading(false);
       }
     };
 
@@ -90,90 +94,101 @@ function MyProfile() {
 
   return (
     <div>
-      <div className="center-div">
+      {isLoading ? (
+        <div class="wrapper">
+          <span class="loader"></span>
+        </div>
+      ) : (
         <div>
-          <Link to="section1" smooth={true} duration={500}>
-            About Me
-          </Link>
-        </div>
-        <div>
-          <Link to="section2" smooth={true} duration={500}>
-            My career
-          </Link>
-        </div>
-        <div>
-          <Link to="section3" smooth={true} duration={500}>
-            My Project
-          </Link>
-        </div>
-        <div>
-          <Link to="section4" smooth={true} duration={500}>
-            Contact Me
-          </Link>
-        </div>
-      </div>
-      <div className="introduce">
-        <h1>Welcome to my site!</h1>
-        <span>This is my personal site, hope you enjoy it!</span>
-      </div>
-      <Element name="section1" className="section">
-        {aboutMeData &&
-          aboutMeData.map((item, index) => {
-            return (
-              <div key={index} className="introduce">
-                <h1>{item.name}</h1>
-                <div dangerouslySetInnerHTML={{ __html: item.content }} />
-              </div>
-            );
-          })}
-      </Element>
-      <Element name="section2" className="section">
-        {myCareerData &&
-          myCareerData.map((item, index) => {
-            return (
-              <div key={index} className="introduce">
-                <h1>{item.name}</h1>
-                <span>{item.content}</span>
-              </div>
-            );
-          })}
-      </Element>
-      <Element name="section3" className="section">
-        <div className="introduce">
-          <h1>My Project</h1>
-          <ol>
-          {myProjectData &&
-            myProjectData.map((item, index) => {
-              return (
-                <li key={index}>
-                  <span
-                    style={{ cursor: "pointer" }}
-                    onClick={() => openModal(item.content)}
-                  >
-                    {item.name}
-                  </span>
-                </li>
-              );
-            })}
-</ol> 
-
-        </div>
-      </Element>
-      <Element name="section4" className="section">
-        <div className="introduce">
-          <h1>My Contact</h1>
-          <div className="connect-text">
-          {myContactData &&
-            myContactData.map((item, index) => {
-              return (
-                <div key={index}>
-                  <SocialIcon url={item.content} className="social-icon"/>
-                </div>
-              );
-            })}
+          <div className="center-div">
+            <div>
+              <Link to="section1" smooth={true} duration={500}>
+                About Me
+              </Link>
+            </div>
+            <div>
+              <Link to="section2" smooth={true} duration={500}>
+                My career
+              </Link>
+            </div>
+            <div>
+              <Link to="section3" smooth={true} duration={500}>
+                My Project
+              </Link>
+            </div>
+            <div>
+              <Link to="section4" smooth={true} duration={500}>
+                Contact Me
+              </Link>
+            </div>
           </div>
+          <div className="introduce">
+            <h1>Welcome to my site!</h1>
+            <span>This is my personal site, hope you enjoy it!</span>
+          </div>
+          <Element name="section1" className="section">
+            {aboutMeData &&
+              aboutMeData.map((item, index) => {
+                return (
+                  <div key={index} className="introduce">
+                    <h1>{item.name}</h1>
+                    <div dangerouslySetInnerHTML={{ __html: item.content }} />
+                  </div>
+                );
+              })}
+          </Element>
+          <Element name="section2" className="section">
+            {myCareerData &&
+              myCareerData.map((item, index) => {
+                return (
+                  <div key={index} className="introduce">
+                    <h1>{item.name}</h1>
+                    <span>{item.content}</span>
+                  </div>
+                );
+              })}
+          </Element>
+          <Element name="section3" className="section">
+            <div className="introduce">
+              <h1>My Project</h1>
+              <ol>
+                {myProjectData &&
+                  myProjectData.map((item, index) => {
+                    return (
+                      <li key={index}>
+                        <span
+                          style={{ cursor: "pointer" }}
+                          onClick={() => openModal(item.content)}
+                        >
+                          {item.name}
+                        </span>
+                      </li>
+                    );
+                  })}
+              </ol>
+            </div>
+          </Element>
+          <Element name="section4" className="section">
+            <div className="introduce">
+              <h1>My Contact</h1>
+              <div className="connect-text">
+                {myContactData &&
+                  myContactData.map((item, index) => {
+                    return (
+                      <div key={index}>
+                        <SocialIcon
+                          url={item.content}
+                          className="social-icon"
+                        />
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </Element>
         </div>
-      </Element>
+      )}
+
       <CustomModal
         isOpen={isOpenModal}
         data={modalContent}
@@ -182,5 +197,4 @@ function MyProfile() {
     </div>
   );
 }
-
 export default MyProfile;
