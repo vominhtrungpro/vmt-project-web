@@ -104,6 +104,7 @@ function UserInfo() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       const token = localStorage.getItem("token");
+      console.log(token)
       if (token) {
         setIsLoggedIn(true);
         try {
@@ -131,7 +132,13 @@ function UserInfo() {
             }
           }
         } catch (error) {
-          notify("Error get user info:", error);
+          if (error.response && error.response.status === 401) {
+            localStorage.removeItem("token");
+            setIsLoggedIn(false);
+            navigate("/chat");
+          } else {
+            notify("Error getting user info:", error);
+          }    
         }
       } else {
         navigate("/");
