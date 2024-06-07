@@ -83,8 +83,7 @@ function MyProfile() {
 
         setIsLoading(false);
       } catch (error) {
-        console.error("Error:", error);
-        setIsLoading(false);
+        setTimeout(fetchData, 5000);
       }
     };
 
