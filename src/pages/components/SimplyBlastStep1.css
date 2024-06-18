@@ -1,0 +1,53 @@
+.step-content {
+  margin: 20px;
+}
+
+.step-content p {
+  font-size: 1.2em;
+}
+
+.step-content h4 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  width: 100px; /* Đặt chiều rộng cố định cho nhãn */
+  margin-right: 10px;
+  text-align: right; /* Canh phải nhãn để có khoảng cách đúng */
+}
+
+.form-group input {
+  padding: 5px;
+}
+
+.button-no-background {
+  background: none;
+  border: 1px solid #000;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.button-no-background:hover {
+  background: #f0f0f0;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Greyout effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it is above other content */
+}
+

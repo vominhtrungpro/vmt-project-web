@@ -1,0 +1,172 @@
+/* Thêm kiểu dáng cho dropdown và cải thiện layout của bảng và phân trang */
+.table-container {
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.pagination {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-left: auto;
+}
+
+.pagination li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.pagination li a {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination li a:hover {
+  background-color: #50cd89;
+  color: white;
+}
+
+.pagination li.active a {
+  background-color: #50cd89;
+  color: white;
+  border: 1px solid #50cd89;
+}
+
+.rows-per-page {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+  margin-left: 20px;
+}
+
+.rows-per-page span {
+  margin-left: 10px;
+}
+
+.rows-per-page select {
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s;
+  height: 40px;
+}
+
+.rows-per-page select:hover,
+.rows-per-page select:focus {
+  border-color: #50cd89;
+}
+
+.rows-per-page select::-ms-expand {
+  display: none;
+}
+
+.rows-per-page select::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-select {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.custom-select select {
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s;
+  height: 40px;
+  width: 200px;
+}
+
+.custom-select select:hover,
+.custom-select select:focus {
+  border-color: #50cd89;
+}
+
+.custom-select select::-ms-expand {
+  display: none;
+}
+
+.custom-select select::-webkit-scrollbar {
+  display: none;
+}
+
+/* SimplyBlastStep2.css */
+.table-body {
+  display: block;
+  max-height: 300px; /* Adjust the height as needed */
+  overflow-y: auto;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table-body tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.table-header, .table-body tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.button-no-background:disabled {
+  background-color: #cccccc; /* Disabled background color */
+  cursor: not-allowed;
+  color: #666666; /* Disabled text color */
+}
+

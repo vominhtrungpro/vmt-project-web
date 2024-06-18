@@ -1,0 +1,34 @@
+.button-no-background {
+  background: none;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  outline: none;
+}
+
+.button-no-background:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.button-no-background:focus {
+  outline: 2px solid #333;
+}
+
+.footer {
+  margin-top: auto;
+  padding: 10px;
+  text-align: center;
+}
+
+.step {
+  display: inline-block;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.active {
+  border-bottom: 2px solid blue; /* Change the color and style as needed */
+}
