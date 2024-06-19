@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./SimplyBlast.css";
 import SimplyBlastStep1 from "./components/SimplyBlastStep1";
 import SimplyBlastStep2 from "./components/SimplyBlastStep2";
+import SimplyBlastStep3 from "./components/SimplyBlastStep3";
 
 const Step1 = () => <div>Bước 1</div>;
 
@@ -32,6 +33,14 @@ const SimplyBlast = () => {
             token={token}
           />
         );
+        case 3:
+          return (
+            <SimplyBlastStep3
+              onPrevious={handlePreviousStep3}
+              onNext={handleNextStep3}
+              token={token}
+            />
+          );
       default:
         return <Step1 />;
     }
@@ -58,7 +67,15 @@ const SimplyBlast = () => {
     nextStep();
   };
 
+  const handleNextStep3 = () => {
+    nextStep();
+  };
+
   const handlePreviousStep2 = () => {
+    prevStep();
+  };
+
+  const handlePreviousStep3 = () => {
     prevStep();
   };
 
