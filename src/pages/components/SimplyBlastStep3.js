@@ -11,6 +11,9 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
   const [responseData, setResponseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [template, setTemplate] = useState(null);
+  const [fields, setFields] = useState(null);
+  const [date,setDate] = useState('');
+  const [time,setTime] = useState('');
 
   const pricingTypeEnum = {
     1: "Utility",
@@ -42,14 +45,43 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
 
   const handleChooseTemplate = (e) => {
     setTemplate(e);
-    console.log(e);
+    extractPlaceholders(e.content);
+  };
+
+  const extractPlaceholders = (template) => {
+    const regex = /{{\s*(\d+)\s*}}/g;
+    let match;
+    const placeholders = [];
+    while ((match = regex.exec(template)) !== null) {
+      placeholders.push(match[0]); // push the entire match, e.g., {{1}}
+    }
+    return placeholders;
   };
 
   const handlePrevious = async () => {
     onPrevious();
   };
 
-  const fetchData = useCallback(
+  const fetchFields = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        "https://app-simplyblast-api-qa-sea.azurewebsites.net/api/contact/fields",
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      
+      const filteredData = response.data.data.filter(item => item.binding !== "SubscriptionStatus" && item.binding !== "Tags");
+      setFields(filteredData);
+    } catch (error) {
+      console.error("Error fetching data!:", error);
+    }
+  }, [token]);
+
+  const fetchTemplates = useCallback(
     async (pageIndex, pageSize) => {
       setLoading(true);
       try {
@@ -86,8 +118,35 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
   );
 
   useEffect(() => {
-    fetchData(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage, fetchData]);
+    fetchTemplates(currentPage, itemsPerPage);
+  }, [currentPage, itemsPerPage, fetchTemplates]);
+
+  useEffect(() => {
+    fetchFields();
+  }, [fetchFields]);
+
+  useEffect(() => {
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + 1);
+    
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); 
+    const day = String(currentDate.getDate()).padStart(2, '0'); 
+    const formattedDate = `${year}-${month}-${day}`;
+
+    setDate(formattedDate);
+
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 1);
+
+    const hours = String(currentTime.getHours()).padStart(2, '0'); 
+    const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}`;
+
+    setTime(formattedTime);
+
+  }, []);
+
 
   return (
     <div className="step-content">
@@ -154,25 +213,60 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
         </div>
       </div>
       <h4>Template</h4>
-      <div class="phone-frame">
-        <div class="speaker"></div>
-        <div class="phone-screen">
-          <div class="messages">
-            {template && (
-              <div class="message received">
-                <div>{template.content}</div>
-                <div>
-                  {" "}
-                  {template.mediaList &&
-                    template.mediaList.map((row) => (
-                      <img src={row} alt="Girl in a jacket"></img>
-                    ))}
+      <div className="template-container">
+        <div class="phone-frame">
+          <div class="speaker"></div>
+          <div class="phone-screen">
+            <div class="messages">
+              {template && (
+                <div class="message received">
+                  <div>{template.content}</div>
+                  <div>
+                    {template.mediaList &&
+                      template.mediaList.map((row) => (
+                        <img src={row} alt="Girl in a jacket"></img>
+                      ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-        <div class="home-button"></div>
+        <div class="value-form">
+          <div className="form-group">
+            <label for="username">Broadcast Date*</label>
+            <input
+              type="date"
+              id="broadcast-date"
+              name="broadcast-date"
+              defaultValue={date}
+            ></input>
+          </div>
+          <div className="form-group">
+            <label for="username">Broadcast Time*</label>
+            <input
+              type="time"
+              id="broadcast-time"
+              name="broadcast-time"
+              defaultValue={time}
+            ></input>
+          </div>
+          {template && (
+            <div>
+              {template.content &&
+                extractPlaceholders(template.content).map((row) => (
+                  <div className="form-group">
+                    <label for="username">{row}</label>
+                    <select>
+                      {fields && fields.map((field) =>(
+                      <option>{field.displayName}</option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <button className="button-no-background" onClick={handlePrevious}>

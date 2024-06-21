@@ -230,6 +230,7 @@ tr:hover {
     overflow-y: auto;
     height: calc(100% - 40px); /* Adjusting height for padding */
     padding-bottom: 60px; /* Space for the bottom */
+
   }
   
   .message {
@@ -239,6 +240,7 @@ tr:hover {
     line-height: 1.4;
     background-color: #ffffff;
     position: relative;
+    display: block;
   }
   
   .message.received {
@@ -257,5 +259,19 @@ tr:hover {
     border-radius: 10px;
     margin-top: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .template-container {
+    display: flex;
+  }
+
+  .value-form {
+    align-items: flex-start; 
+    padding: 20px;
+    width: auto;
+  }
+
+  .form-group {
+    display: flex;
   }
   
