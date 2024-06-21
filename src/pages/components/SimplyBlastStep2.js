@@ -1,21 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 import "./SimplyBlastStep2.css";
 import ReactPaginate from "react-paginate";
-import { RotatingLines } from 'react-loader-spinner';
+import { RotatingLines } from "react-loader-spinner";
 
-function SimplyBlastStep2({ onPrevious, onNext, token }) {
+function SimplyBlastStep2({
+  campaignName,
+  setCampaignName,
+  subscriptionStatus,
+  setSubscriptionStatus,
+  tag,
+  setTag,
+  onPrevious,
+  onNext,
+  token,
+}) {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [pageCount, setPageCount] = useState(0);
   const [responseData, setResponseData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [campaignName, setCampaignName] = useState("");
-  const [subscriptionStatus, setSubscriptionStatus] = useState("None");
   const [tags, setTags] = useState([]);
-  const [tag, setTag] = useState("None");
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const [tagName, setTagName] = useState("");
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -31,7 +38,9 @@ function SimplyBlastStep2({ onPrevious, onNext, token }) {
   };
 
   const handleTagChange = (e) => {
-    setTag(e.target.value);
+    const selectedTag = JSON.parse(e.target.value);
+    setTag(selectedTag.id);
+    setTagName(selectedTag.tagName);
   };
 
   const handleNext = async () => {
@@ -42,50 +51,57 @@ function SimplyBlastStep2({ onPrevious, onNext, token }) {
     onPrevious();
   };
 
-  const fetchData = useCallback(async (pageIndex, pageSize) => {
-    setLoading(true);
-    try {
-      const filters = [];
+  const fetchData = useCallback(
+    async (pageIndex, pageSize) => {
+      setLoading(true);
+      try {
+        const filters = [];
 
-      if (subscriptionStatus !== 'None') {
-        filters.push({
-          fieldName: "SubscriptionStatus",
-          value: subscriptionStatus,
-          operation: 0
-        });
-      }
-
-      if (tag !== 'None') {
-        filters.push({
-          fieldName: "TagName",
-          value: tag,
-          operation: 0
-        });
-      }
-
-      const response = await axios.post('https://app-simplyblast-api-qa-sea.azurewebsites.net/api/contact/search', {
-        pageIndex: pageIndex + 1,
-        pageSize: pageSize,
-        filters: filters,
-        sortBy: {
-          fieldName: "Id",
-          ascending: true
+        if (subscriptionStatus !== "None") {
+          filters.push({
+            fieldName: "SubscriptionStatus",
+            value: subscriptionStatus,
+            operation: 0,
+          });
         }
-      }, {
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/json'
-        }
-      });
 
-      setPageCount(response.data.data.numOfPages);
-      setResponseData(response.data.data.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [token, subscriptionStatus, tag]);
+        if (tagName !== "None") {
+          filters.push({
+            fieldName: "TagName",
+            value: tagName,
+            operation: 0,
+          });
+        }
+
+        const response = await axios.post(
+          "https://app-simplyblast-api-qa-sea.azurewebsites.net/api/contact/search",
+          {
+            pageIndex: pageIndex + 1,
+            pageSize: pageSize,
+            filters: filters,
+            sortBy: {
+              fieldName: "Id",
+              ascending: true,
+            },
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setPageCount(response.data.data.numOfPages);
+        setResponseData(response.data.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token, subscriptionStatus, tagName]
+  );
 
   useEffect(() => {
     fetchData(currentPage, itemsPerPage);
@@ -94,15 +110,18 @@ function SimplyBlastStep2({ onPrevious, onNext, token }) {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await axios.get('https://app-simplyblast-api-qa-sea.azurewebsites.net/api/tag', {
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
+        const response = await axios.get(
+          "https://app-simplyblast-api-qa-sea.azurewebsites.net/api/tag",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+              "Content-Type": "application/json",
+            },
           }
-        });
+        );
         setTags(response.data.data);
       } catch (error) {
-        console.error('Error fetching tags:', error);
+        console.error("Error fetching tags:", error);
       }
     };
     fetchTags();
@@ -120,7 +139,7 @@ function SimplyBlastStep2({ onPrevious, onNext, token }) {
     <div className="step-content">
       <div>
         <table>
-          <thead className='table-header'>
+          <thead className="table-header">
             <tr>
               <th>ID</th>
               <th>MobileNo</th>
@@ -128,15 +147,16 @@ function SimplyBlastStep2({ onPrevious, onNext, token }) {
               <th>Tags</th>
             </tr>
           </thead>
-          <tbody className='table-body'>
+          <tbody className="table-body">
             {loading ? (
               <tr>
-                <td colSpan="4" style={{ textAlign: 'center' }}>
+                <td colSpan="4" style={{ textAlign: "center" }}>
                   <RotatingLines color="#00BFFF" height={80} width={80} />
                 </td>
               </tr>
             ) : (
-              responseData && responseData.map((row) => (
+              responseData &&
+              responseData.map((row) => (
                 <tr key={row.id}>
                   <td>{row.id}</td>
                   <td>{row.mobileNo}</td>
@@ -188,7 +208,10 @@ function SimplyBlastStep2({ onPrevious, onNext, token }) {
       <div className="form-group">
         <label>Filter by subscription status*</label>
         <div className="custom-select">
-          <select value={subscriptionStatus} onChange={handleSubscriptionStatusChange}>
+          <select
+            value={subscriptionStatus}
+            onChange={handleSubscriptionStatusChange}
+          >
             <option value="None">None</option>
             <option value="Unconfirmed">Unconfirmed</option>
             <option value="Subscribed">Subscribed</option>
@@ -200,17 +223,26 @@ function SimplyBlastStep2({ onPrevious, onNext, token }) {
         <label>Filter by tags*</label>
         <div className="custom-select">
           <select value={tag} onChange={handleTagChange}>
-            <option value="None">None</option>
-            {tags && tags.map((tag) => (
-              <option key={tag.id} value={tag.tagName}>{tag.tagName}</option>
-            ))}
+            <option value={JSON.stringify({ id: "", tagName: "None" })}>
+              None
+            </option>
+            {tags &&
+              tags.map((tag) => (
+                <option key={tag.id} value={JSON.stringify(tag)}>
+                  {tag.tagName}
+                </option>
+              ))}
           </select>
         </div>
       </div>
       <button className="button-no-background" onClick={handlePrevious}>
         Previous
       </button>
-      <button className="button-no-background" onClick={handleNext} disabled={!isFormValid}>
+      <button
+        className="button-no-background"
+        onClick={handleNext}
+        disabled={!isFormValid}
+      >
         Next
       </button>
     </div>

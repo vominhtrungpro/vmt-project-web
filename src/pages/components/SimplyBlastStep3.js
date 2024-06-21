@@ -3,8 +3,17 @@ import axios from "axios";
 import "./SimplyBlastStep3.css";
 import ReactPaginate from "react-paginate";
 import { RotatingLines } from "react-loader-spinner";
+import moment from 'moment';
 
-function SimplyBlastStep3({ onPrevious, onNext, token }) {
+
+function SimplyBlastStep3({
+  campaignName,
+  tag,
+  subScriptionStatus,
+  onPrevious,
+  onNext,
+  token,
+}) {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [pageCount, setPageCount] = useState(0);
@@ -12,8 +21,8 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
   const [loading, setLoading] = useState(true);
   const [template, setTemplate] = useState(null);
   const [fields, setFields] = useState(null);
-  const [date,setDate] = useState('');
-  const [time,setTime] = useState('');
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
   const pricingTypeEnum = {
     1: "Utility",
@@ -40,7 +49,7 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
   };
 
   const handleNext = async () => {
-    onNext();
+    createCampaign();
   };
 
   const handleChooseTemplate = (e) => {
@@ -49,11 +58,11 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
   };
 
   const extractPlaceholders = (template) => {
-    const regex = /{{\s*(\d+)\s*}}/g;
+    const regex = /{{\s*([^{}]+)\s*}}/g;
     let match;
     const placeholders = [];
     while ((match = regex.exec(template)) !== null) {
-      placeholders.push(match[0]); // push the entire match, e.g., {{1}}
+      placeholders.push(match[0]);
     }
     return placeholders;
   };
@@ -73,8 +82,11 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
           },
         }
       );
-      
-      const filteredData = response.data.data.filter(item => item.binding !== "SubscriptionStatus" && item.binding !== "Tags");
+
+      const filteredData = response.data.data.filter(
+        (item) =>
+          item.binding !== "SubscriptionStatus" && item.binding !== "Tags"
+      );
       setFields(filteredData);
     } catch (error) {
       console.error("Error fetching data!:", error);
@@ -117,6 +129,38 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
     [token]
   );
 
+  const createCampaign = useCallback(async () => {
+    const recipientRequest = {
+      isUnconfirmed: subScriptionStatus === "Unconfirmed",
+      isSubscribe: subScriptionStatus === "Subscribed",
+      isUnsubscribe: subScriptionStatus === "Unsubscribe",
+      tagFilters: [tag],
+    };
+
+    const messageRequest = {
+      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      isInitialize: true,
+      name: "Initial message",
+      content: "string",
+      templateId: template.id,
+      broadcastSchedule: moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').toISOString(),
+      buttons: []
+    }
+
+    const createCampaignRequest = {
+      name: campaignName,
+      isEnableTwoWay: false,
+      isBypassUnsubBlock: false,
+      isTurnOnFollowingMessage: false,
+      status: "Pending",
+      recipientRequest: recipientRequest,
+      messageRequests: [messageRequest],
+      twoWayRequests: [],
+    };
+
+    console.log(createCampaignRequest);
+  }, [campaignName, subScriptionStatus, tag, date, time, template]);
+
   useEffect(() => {
     fetchTemplates(currentPage, itemsPerPage);
   }, [currentPage, itemsPerPage, fetchTemplates]);
@@ -128,10 +172,10 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
   useEffect(() => {
     const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() + 1);
-    
+
     const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); 
-    const day = String(currentDate.getDate()).padStart(2, '0'); 
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
 
     setDate(formattedDate);
@@ -139,14 +183,12 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
     const currentTime = new Date();
     currentTime.setHours(currentTime.getHours() + 1);
 
-    const hours = String(currentTime.getHours()).padStart(2, '0'); 
-    const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+    const hours = String(currentTime.getHours()).padStart(2, "0");
+    const minutes = String(currentTime.getMinutes()).padStart(2, "0");
     const formattedTime = `${hours}:${minutes}`;
 
     setTime(formattedTime);
-
   }, []);
-
 
   return (
     <div className="step-content">
@@ -214,12 +256,12 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
       </div>
       <h4>Template</h4>
       <div className="template-container">
-        <div class="phone-frame">
-          <div class="speaker"></div>
-          <div class="phone-screen">
-            <div class="messages">
+        <div className="phone-frame">
+          <div className="speaker"></div>
+          <div className="phone-screen">
+            <div className="messages">
               {template && (
-                <div class="message received">
+                <div className="message received">
                   <div>{template.content}</div>
                   <div>
                     {template.mediaList &&
@@ -232,14 +274,14 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
             </div>
           </div>
         </div>
-        <div class="value-form">
+        <div className="value-form">
           <div className="form-group">
             <label for="username">Broadcast Date*</label>
             <input
               type="date"
               id="broadcast-date"
               name="broadcast-date"
-              defaultValue={date}
+              value={date}
             ></input>
           </div>
           <div className="form-group">
@@ -248,7 +290,7 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
               type="time"
               id="broadcast-time"
               name="broadcast-time"
-              defaultValue={time}
+              value={time}
             ></input>
           </div>
           {template && (
@@ -258,9 +300,10 @@ function SimplyBlastStep3({ onPrevious, onNext, token }) {
                   <div className="form-group">
                     <label for="username">{row}</label>
                     <select>
-                      {fields && fields.map((field) =>(
-                      <option>{field.displayName}</option>
-                      ))}
+                      {fields &&
+                        fields.map((field) => (
+                          <option>{field.displayName}</option>
+                        ))}
                     </select>
                   </div>
                 ))}

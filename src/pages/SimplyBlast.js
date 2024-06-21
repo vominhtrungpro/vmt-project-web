@@ -12,6 +12,9 @@ const SimplyBlast = () => {
   const [token, setToken] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [campaignName, setCampaignName] = useState("");
+  const [subscriptionStatus, setSubscriptionStatus] = useState("None");
+  const [tag, setTag] = useState("None");
 
   const renderStep = () => {
     switch (currentStep) {
@@ -28,19 +31,28 @@ const SimplyBlast = () => {
       case 2:
         return (
           <SimplyBlastStep2
+            campaignName={campaignName}
+            setCampaignName={setCampaignName}
+            tag={tag}
+            setTag={setTag}
+            subscriptionStatus={subscriptionStatus}
+            setSubscriptionStatus={setSubscriptionStatus}
             onPrevious={handlePreviousStep2}
             onNext={handleNextStep2}
             token={token}
           />
         );
-        case 3:
-          return (
-            <SimplyBlastStep3
-              onPrevious={handlePreviousStep3}
-              onNext={handleNextStep3}
-              token={token}
-            />
-          );
+      case 3:
+        return (
+          <SimplyBlastStep3
+            subScriptionStatus={subscriptionStatus}
+            tag={tag}
+            campaignName={campaignName}
+            onPrevious={handlePreviousStep3}
+            onNext={handleNextStep3}
+            token={token}
+          />
+        );
       default:
         return <Step1 />;
     }
@@ -82,19 +94,13 @@ const SimplyBlast = () => {
   return (
     <div>
       <div className="center-div">
-        <div
-          className={`step ${currentStep === 1 ? "active" : ""}`}
-        >
+        <div className={`step ${currentStep === 1 ? "active" : ""}`}>
           Step 1
         </div>
-        <div
-          className={`step ${currentStep === 2 ? "active" : ""}`}
-        >
+        <div className={`step ${currentStep === 2 ? "active" : ""}`}>
           Step 2
         </div>
-        <div
-          className={`step ${currentStep === 3 ? "active" : ""}`}
-        >
+        <div className={`step ${currentStep === 3 ? "active" : ""}`}>
           Step 3
         </div>
       </div>
