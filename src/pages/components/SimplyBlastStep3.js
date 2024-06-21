@@ -259,9 +259,9 @@ function SimplyBlastStep3({
         <div className="phone-frame">
           <div className="speaker"></div>
           <div className="phone-screen">
-            <div className="messages">
+            <div className="init-messages">
               {template && (
-                <div className="message received">
+                <div className="init-message received">
                   <div>{template.content}</div>
                   <div>
                     {template.mediaList &&

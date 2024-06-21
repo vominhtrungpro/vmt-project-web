@@ -38,10 +38,18 @@ function SimplyBlastStep2({
   };
 
   const handleTagChange = (e) => {
-    const selectedTag = JSON.parse(e.target.value);
-    setTag(selectedTag.id);
-    setTagName(selectedTag.tagName);
+    const selectedTagId = e.target.value;
+    const selectedTag = tags.find(tag => tag.id === selectedTagId);
+  
+    if (selectedTag) {
+      setTag(selectedTag.id);
+      setTagName(selectedTag.tagName);
+    } else {
+      setTag("None");
+      setTagName("None");
+    }
   };
+  
 
   const handleNext = async () => {
     onNext();
@@ -91,6 +99,9 @@ function SimplyBlastStep2({
             },
           }
         );
+
+        console.log(subscriptionStatus)
+        console.log(tagName)
 
         setPageCount(response.data.data.numOfPages);
         setResponseData(response.data.data.data);
@@ -222,17 +233,15 @@ function SimplyBlastStep2({
       <div className="form-group">
         <label>Filter by tags*</label>
         <div className="custom-select">
-          <select value={tag} onChange={handleTagChange}>
-            <option value={JSON.stringify({ id: "", tagName: "None" })}>
-              None
-            </option>
-            {tags &&
-              tags.map((tag) => (
-                <option key={tag.id} value={JSON.stringify(tag)}>
-                  {tag.tagName}
-                </option>
-              ))}
-          </select>
+        <select value={tag} onChange={handleTagChange}>
+  <option value="None">None</option>
+  {tags &&
+    tags.map((tag) => (
+      <option key={tag.id} value={tag.id}>
+        {tag.tagName}
+      </option>
+    ))}
+</select>
         </div>
       </div>
       <button className="button-no-background" onClick={handlePrevious}>

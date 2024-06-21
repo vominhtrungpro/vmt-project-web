@@ -224,7 +224,7 @@ tr:hover {
     transform: translateX(-50%);
   }
   
-  .messages {
+  .init-messages {
     flex-direction: column;
     gap: 10px;
     overflow-y: auto;
@@ -233,7 +233,7 @@ tr:hover {
 
   }
   
-  .message {
+  .init-message {
     max-width: 70%;
     padding: 10px;
     border-radius: 10px;
@@ -243,17 +243,17 @@ tr:hover {
     display: block;
   }
   
-  .message.received {
+  .init-message.received {
     align-self: flex-start;
     background-color: #ffffff;
   }
   
-  .message.sent {
+  .init-message.sent {
     align-self: flex-end;
     background-color: #dcf8c6;
   }
   
-  .message img {
+  .init-message img {
     max-width: 100%;
     height: auto;
     border-radius: 10px;
