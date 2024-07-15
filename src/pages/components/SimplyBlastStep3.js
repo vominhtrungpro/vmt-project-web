@@ -3,8 +3,9 @@ import axios from "axios";
 import "./SimplyBlastStep3.css";
 import ReactPaginate from "react-paginate";
 import { RotatingLines } from "react-loader-spinner";
-import moment from 'moment';
-
+import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 function SimplyBlastStep3({
   campaignName,
@@ -23,6 +24,9 @@ function SimplyBlastStep3({
   const [fields, setFields] = useState(null);
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [search, setSearch] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeButton, setActiveButton] = useState("All templates");
 
   const pricingTypeEnum = {
     1: "Utility",
@@ -37,10 +41,15 @@ function SimplyBlastStep3({
     2: "Approved",
     3: "Pending Review",
     4: "Rejected",
+    "-1": "Delete",
   };
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
+  };
+
+  const handleButtonClick = (buttonName) => {
+    setActiveButton(buttonName);
   };
 
   const handleItemsPerPageChange = (e) => {
@@ -55,6 +64,17 @@ function SimplyBlastStep3({
   const handleChooseTemplate = (e) => {
     setTemplate(e);
     extractPlaceholders(e.content);
+  };
+
+  const handleInputChange = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      setSearchQuery(search)
+      fetchTemplates(currentPage, itemsPerPage); 
+    }
   };
 
   const extractPlaceholders = (template) => {
@@ -99,6 +119,42 @@ function SimplyBlastStep3({
       try {
         const filters = [];
 
+        let value;
+        switch (activeButton) {
+          case "Pending":
+            value = "1";
+            break;
+          case "Rejected":
+            value = "4";
+            break;
+          case "Approved":
+            value = "2";
+            break;
+          case "Delete":
+            value = "-1";
+            break;
+          default:
+            value = "";
+        }
+
+        if (activeButton !== "All templates") {
+          filters.push({
+            fieldName: "Status",
+            value: value,
+            operation: 0,
+          });
+        }
+
+        if (searchQuery !== "") {
+          filters.push({
+            fieldName: "Name",
+            value: searchQuery,
+            operation: 3,
+          });
+        }
+
+        console.log(filters)
+
         const response = await axios.post(
           "https://app-simplyblast-api-qa-sea.azurewebsites.net/api/template/search",
           {
@@ -109,6 +165,7 @@ function SimplyBlastStep3({
               fieldName: "Id",
               ascending: true,
             },
+            userRoles: 1
           },
           {
             headers: {
@@ -126,7 +183,7 @@ function SimplyBlastStep3({
         setLoading(false);
       }
     },
-    [token]
+    [token, activeButton, searchQuery]
   );
 
   const createCampaign = useCallback(async () => {
@@ -143,9 +200,12 @@ function SimplyBlastStep3({
       name: "Initial message",
       content: "string",
       templateId: template.id,
-      broadcastSchedule: moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').toISOString(),
-      buttons: []
-    }
+      broadcastSchedule: moment(
+        `${date} ${time}`,
+        "YYYY-MM-DD HH:mm"
+      ).toISOString(),
+      buttons: [],
+    };
 
     const createCampaignRequest = {
       name: campaignName,
@@ -163,7 +223,8 @@ function SimplyBlastStep3({
 
   useEffect(() => {
     fetchTemplates(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage, fetchTemplates]);
+  }, [fetchTemplates, currentPage, itemsPerPage]);
+
 
   useEffect(() => {
     fetchFields();
@@ -193,6 +254,36 @@ function SimplyBlastStep3({
   return (
     <div className="step-content">
       <p>Choose a template for your message</p>
+      <div className="search-container">
+        <input
+          type="text"
+          className="input-search"
+          placeholder="search"
+          value={search}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+        />
+        <FontAwesomeIcon
+          icon={faSearch}
+          className="search-icon"
+          onClick={fetchTemplates}
+        />
+      </div>
+      <div className="button-container">
+        {["All templates", "Pending", "Rejected", "Approved", "Delete"].map(
+          (buttonName) => (
+            <button
+              key={buttonName}
+              className={`filter-button ${
+                activeButton === buttonName ? "active" : ""
+              }`}
+              onClick={() => handleButtonClick(buttonName)}
+            >
+              {buttonName}
+            </button>
+          )
+        )}
+      </div>
       <div>
         <table>
           <thead className="table-header">

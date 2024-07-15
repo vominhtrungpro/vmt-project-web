@@ -7,10 +7,10 @@ import { RotatingLines } from "react-loader-spinner";
 function SimplyBlastStep2({
   campaignName,
   setCampaignName,
-  subscriptionStatus,
-  setSubscriptionStatus,
   tag,
   setTag,
+  subscriptionStatus,
+  setSubscriptionStatus,
   onPrevious,
   onNext,
   token,
@@ -22,7 +22,7 @@ function SimplyBlastStep2({
   const [loading, setLoading] = useState(true);
   const [tags, setTags] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [tagName, setTagName] = useState("");
+  const [tagName, setTagName] = useState("None");
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -99,9 +99,6 @@ function SimplyBlastStep2({
             },
           }
         );
-
-        console.log(subscriptionStatus)
-        console.log(tagName)
 
         setPageCount(response.data.data.numOfPages);
         setResponseData(response.data.data.data);

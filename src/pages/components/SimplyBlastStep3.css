@@ -181,97 +181,149 @@ tr:hover {
 }
 
 .phone-frame {
-    width: 300px;
-    height: 600px;
-    border: 16px solid black;
-    border-top: 60px solid black;
-    border-bottom: 60px solid black;
-    border-radius: 36px;
-    position: relative;
-    background: white;
-  }
-  
-  .phone-screen {
-    width: 100%;
-    height: 100%;
-    background: #e5ddd5;
-    border-radius: 20px;
-    overflow: hidden;
-    padding: 20px;
-    box-sizing: border-box;
-    position: relative;
-  }
-  
-  .speaker {
-    width: 60px;
-    height: 8px;
-    background: grey;
-    border-radius: 4px;
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .home-button {
-    width: 50px;
-    height: 50px;
-    background: grey;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .init-messages {
-    flex-direction: column;
-    gap: 10px;
-    overflow-y: auto;
-    height: calc(100% - 40px); /* Adjusting height for padding */
-    padding-bottom: 60px; /* Space for the bottom */
+  width: 300px;
+  height: 600px;
+  border: 16px solid black;
+  border-top: 60px solid black;
+  border-bottom: 60px solid black;
+  border-radius: 36px;
+  position: relative;
+  background: white;
+}
 
-  }
-  
-  .init-message {
-    max-width: 70%;
-    padding: 10px;
-    border-radius: 10px;
-    line-height: 1.4;
-    background-color: #ffffff;
-    position: relative;
-    display: block;
-  }
-  
-  .init-message.received {
-    align-self: flex-start;
-    background-color: #ffffff;
-  }
-  
-  .init-message.sent {
-    align-self: flex-end;
-    background-color: #dcf8c6;
-  }
-  
-  .init-message img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-top: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: #e5ddd5;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
 
-  .template-container {
-    display: flex;
-  }
+.speaker {
+  width: 60px;
+  height: 8px;
+  background: grey;
+  border-radius: 4px;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-  .value-form {
-    align-items: flex-start; 
-    padding: 20px;
-    width: auto;
-  }
+.home-button {
+  width: 50px;
+  height: 50px;
+  background: grey;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-  .form-group {
-    display: flex;
-  }
-  
+.init-messages {
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  height: calc(100% - 40px); /* Adjusting height for padding */
+  padding-bottom: 60px; /* Space for the bottom */
+}
+
+.init-message {
+  max-width: 70%;
+  padding: 10px;
+  border-radius: 10px;
+  line-height: 1.4;
+  background-color: #ffffff;
+  position: relative;
+  display: block;
+}
+
+.init-message.received {
+  align-self: flex-start;
+  background-color: #ffffff;
+}
+
+.init-message.sent {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+}
+
+.init-message img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.template-container {
+  display: flex;
+}
+
+.value-form {
+  align-items: flex-start;
+  padding: 20px;
+  width: auto;
+}
+
+.form-group {
+  display: flex;
+}
+
+.search-container {
+  position: relative;
+  width: 90%; /* Điều chỉnh chiều rộng theo ý muốn */
+  margin: 0 auto; /* Canh giữa container trong div cha */
+}
+
+.button-container {
+  position: relative;
+  width: 90%; /* Điều chỉnh chiều rộng theo ý muốn */
+  margin: 0 auto; /* Canh giữa container trong div cha */
+}
+
+.input-search {
+  width: 100%;
+  padding: 10px;
+  padding-right: 40px; /* Khoảng trống cho biểu tượng tìm kiếm */
+  box-sizing: border-box; /* Đảm bảo padding không ảnh hưởng đến chiều rộng */
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px; /* Điều chỉnh kích thước biểu tượng */
+  color: #aaa; /* Màu sắc của biểu tượng */
+}
+
+.search-icon:hover {
+  cursor: pointer;
+}
+
+.filter-button {
+  margin-right: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #e5e5e5;
+  color: #222222;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background-color: #222222;
+  color: #ffffff;
+}
+
+.filter-button:active,
+.filter-button.active {
+  background-color: #222222;
+  color: #ffffff;
+}
